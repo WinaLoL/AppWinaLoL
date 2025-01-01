@@ -1,19 +1,33 @@
-import asyncio
-import os
+import inject
+import discord
+from discord.ext import commands
 
-from dotenv import load_dotenv
+from source.services.ClassInjectorService import ClassInjectorService
+from source.services.CommandService import CommandService
+from source.services.EnvService import EnvService
 
-from App.interactions import bot
-from App.tracker import notify_if_friends_in_game
+class Bot(commands.Bot):
+    @inject.autoparams()
+    def __init__(self, env_service: EnvService):
+        self.token = env_service.token()
 
-load_dotenv()  # Charger les variables d'environnement
-TOKEN = os.getenv('TOKEN')
+        intents = discord.Intents.default()
+        intents.message_content = True
+        super().__init__(command_prefix="??", intents=intents)
+
+        command_service = CommandService(self)
+        command_service.add_commands()
+
+    def run(self):
+        super().run(self.token)
+
+    async def on_ready(self):
+        print(f'Logged in as {self.user}')
 
 
-@bot.event
-async def on_ready():
-    print(f'{bot.user} est connecté à Discord !')
-    asyncio.create_task(notify_if_friends_in_game())
+if __name__ == '__main__':
+    class_injector = ClassInjectorService()
+    class_injector.inject()
 
-
-bot.run(TOKEN)
+    bot = Bot()
+    bot.run()
