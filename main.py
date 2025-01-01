@@ -17,18 +17,22 @@ class Bot(commands.Bot):
         super().__init__(command_prefix="??", intents=intents)
 
     def run(self):
-        self.setup()
         super().run(self.token)
 
-    def setup(self):
+    async def setup_cog(self):
         cogs = [UserCommands]
 
         for cog in cogs:
-            asyncio.run(self.add_cog(cog(self)))
+            await self.add_cog(cog(self))
 
     async def on_ready(self):
         print(f'Logged in as {self.user}')
 
+    async def setup_hook(self):
+        await self.setup_cog()
+        self.tree.clear_commands(guild=discord.Object(id=1163969445388111932))
+        self.tree.copy_global_to(guild=discord.Object(id=1163969445388111932))
+        await self.tree.sync(guild=discord.Object(id=1163969445388111932))
 
 if __name__ == '__main__':
     class_injector = ClassInjectorService()
