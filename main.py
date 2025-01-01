@@ -1,9 +1,10 @@
 import inject
+import asyncio
 import discord
 from discord.ext import commands
 
 from source.services.ClassInjectorService import ClassInjectorService
-from source.services.CommandService import CommandService
+from source.commands.UserCommands import UserCommands
 from source.services.EnvService import EnvService
 
 class Bot(commands.Bot):
@@ -15,11 +16,15 @@ class Bot(commands.Bot):
         intents.message_content = True
         super().__init__(command_prefix="??", intents=intents)
 
-        command_service = CommandService(self)
-        command_service.add_commands()
-
     def run(self):
+        self.setup()
         super().run(self.token)
+
+    def setup(self):
+        cogs = [UserCommands]
+
+        for cog in cogs:
+            asyncio.run(self.add_cog(cog(self)))
 
     async def on_ready(self):
         print(f'Logged in as {self.user}')
