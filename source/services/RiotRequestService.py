@@ -19,7 +19,7 @@ class RiotRequestService:
         url = f"https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{name}/{tag}"
         return self.__get(url)
 
-    def get_summoner_encrypted_id(self, puuid):
-        url = f"https://europe.api.riotgames.com/riot/account/v1/accounts/by-puuid/{puuid}"
+    def get_summoner(self, puuid):
+        url = f"https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}"
         return self.__get(url)
 

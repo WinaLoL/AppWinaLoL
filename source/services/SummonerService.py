@@ -11,10 +11,11 @@ class SummonerService:
         self.riot_request_service = riot_request_service
         self.summoner_repository = summoner_repository
 
-    def add_summoner(self, name, line):
-        puuid = self.riot_request_service.get_summoner_puuid(name, line)['puuid']
+    def add_summoner(self, name, tag):
+        puuid = self.riot_request_service.get_summoner_puuid(name, tag)['puuid']
+        encrypted_id = self.riot_request_service.get_summoner(puuid)['id']
 
-        summoner = Summoner(name, line, puuid)
+        summoner = Summoner(name, tag, puuid, encrypted_id)
         self.summoner_repository.add(summoner)
 
         return summoner
