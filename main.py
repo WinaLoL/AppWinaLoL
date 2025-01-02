@@ -2,9 +2,9 @@ import inject
 import discord
 from discord.ext import commands
 
-from source.commands.TestCommands import TestCommand
+from source.commands.SummonerCommands import SummonerCommands
+from source.commands.TestCommands import TestCommands
 from source.services.ClassInjectorService import ClassInjectorService
-from source.commands.UserCommands import UserCommands
 from source.services.EnvService import EnvService
 
 class Bot(commands.Bot):
@@ -20,10 +20,9 @@ class Bot(commands.Bot):
         super().run(self.token)
 
     async def setup_cog(self):
-        cogs = [UserCommands, TestCommand]
-
+        cogs = [SummonerCommands(), TestCommands()]
         for cog in cogs:
-            await self.add_cog(cog(self))
+            await self.add_cog(cog)
 
     async def on_ready(self):
         print(f'Logged in as {self.user}')

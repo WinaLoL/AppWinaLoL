@@ -8,3 +8,6 @@ class EnvService:
 
     def token(self):
         return os.getenv("TOKEN")
+
+    def riot_api_key(self):
+        return os.getenv("RIOT_API_KEY")
