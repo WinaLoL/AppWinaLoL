@@ -23,5 +23,11 @@ class SummonerService:
     def list_summoners(self):
         return self.summoner_repository.list()
 
+    def remove_summoner(self, name, tag):
+        summoner = self.summoner_repository.get(name, tag)
+        self.summoner_repository.remove(summoner)
+
+        return summoner
+
 
 

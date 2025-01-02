@@ -20,4 +20,4 @@ class Summoner:
         return riot_resource_service.get_icon_url(summoner['profileIconId'])
 
     def __str__(self):
-        return f"{self.name}#{self.tag} ({self.puuid} - {self.encrypted_id})"
+        return f"{self.name}#{self.tag}"

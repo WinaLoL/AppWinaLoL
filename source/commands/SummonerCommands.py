@@ -23,11 +23,25 @@ class SummonerCommands(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.hybrid_command(name='remove_summoner', description='Retire un ami de la liste des idiots.', with_app_command=True)
-    async def remove_summoner(self, ctx):
-        await ctx.send('Remove Summoner')
+    async def remove_summoner(self, ctx, name: str, tag: str):
+        summoner = self.summoner_service.remove_summoner(name, tag)
+
+        embed = discord.Embed(
+            title="Invocateur retiré",
+            description=f"{summoner.name}#{summoner.tag} a été retiré de la liste des invocateurs par {ctx.author.mention}.",
+        )
+        embed.set_thumbnail(url=summoner.icon_url)
+
+        await ctx.send(embed=embed)
 
     @commands.hybrid_command(name='list_summoners', description='Affiche la liste actuelle des invocateurs.', with_app_command=True)
     async def list_summoners(self, ctx):
         summoners = self.summoner_service.list_summoners()
 
-        await ctx.send(f"List Summoners: {', '.join([str(summoner) for summoner in summoners])}")
+        summoners_list = "\n".join([str(summoner) for summoner in summoners])
+        embed = discord.Embed(
+            title="👥 Liste des invocateurs suivis :",
+            description=summoners_list
+        )
+
+        await ctx.send(embed=embed)
