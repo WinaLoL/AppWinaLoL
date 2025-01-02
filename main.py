@@ -1,8 +1,8 @@
 import inject
-import asyncio
 import discord
 from discord.ext import commands
 
+from source.commands.TestCommands import TestCommand
 from source.services.ClassInjectorService import ClassInjectorService
 from source.commands.UserCommands import UserCommands
 from source.services.EnvService import EnvService
@@ -20,7 +20,7 @@ class Bot(commands.Bot):
         super().run(self.token)
 
     async def setup_cog(self):
-        cogs = [UserCommands]
+        cogs = [UserCommands, TestCommand]
 
         for cog in cogs:
             await self.add_cog(cog(self))
