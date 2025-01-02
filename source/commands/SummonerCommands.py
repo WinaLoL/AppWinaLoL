@@ -10,9 +10,10 @@ class SummonerCommands(commands.Cog):
         self.summoner_service = summoner_service
 
     @commands.hybrid_command(name='add_summoner', description='Ajoute un ami à la liste des idiots.', with_app_command=True)
-    async def add_summoner(self, ctx, summoner_name: str, tag_line: str):
-        response = self.summoner_service.get_summoner_puuid(summoner_name, tag_line)
-        await ctx.send(f"Add Summoner: {response}")
+    async def add_summoner(self, ctx, name: str, tag: str):
+        self.summoner_service.add_summoner(name, tag)
+
+        await ctx.send(f"Ajout de {name}#{tag} à la liste des invocateurs.")
 
     @commands.hybrid_command(name='remove_summoner', description='Retire un ami de la liste des idiots.', with_app_command=True)
     async def remove_summoner(self, ctx):
@@ -20,4 +21,6 @@ class SummonerCommands(commands.Cog):
 
     @commands.hybrid_command(name='list_summoners', description='Affiche la liste actuelle des invocateurs.', with_app_command=True)
     async def list_summoners(self, ctx):
-        await ctx.send('List Summoners')
+        summoners = self.summoner_service.list_summoners()
+
+        await ctx.send(f"List Summoners: {', '.join([str(summoner) for summoner in summoners])}")
